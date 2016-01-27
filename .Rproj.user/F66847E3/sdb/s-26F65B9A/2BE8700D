@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: avages\nType: Package\nTitle: Ages of Professors at Williams College\nVersion: 0.1.0\nAuthors@R: person(\"Tanner\", \"Love\", email = \"tml3@williams.edu\",\n     role = c(\"aut\", \"cre\"))\nMaintainer: Who to complain to <tml3@williams.edu>\nDescription: Ages of Professors at Williams College from 2004 to 2014.\n    It includes functions that return the average age of professors every year\n    from 2004 to 2014, return histograms of ages each year, and return the names\n    and ages of the youngest and oldest professors each year.\nLicense: What license is it under?\nLazyData: TRUE\nURL: http://github.com/tannermlove/avages\nBugReports: http://github.com/tannermlove/avages/issues\nSuggests: testthat,\n    knitr\nVignetteBuilder: knitr\n\n",
+    "created" : 1453887130631.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1151793216",
+    "id" : "2BE8700D",
+    "lastKnownWriteTime" : 1453889627,
+    "last_content_update" : 1453889627,
+    "path" : "~/avages/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}

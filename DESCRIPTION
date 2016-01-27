@@ -1,9 +1,19 @@
 Package: avages
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Ages of Professors at Williams College
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Authors@R: person("Tanner", "Love", email = "tml3@williams.edu",
+     role = c("aut", "cre"))
+Maintainer: Who to complain to <tml3@williams.edu>
+Description: Ages of Professors at Williams College from 2004 to 2014.
+    It includes functions that return the average age of professors every year
+    from 2004 to 2014, return histograms of ages each year, and return the names
+    and ages of the youngest and oldest professors each year.
 License: What license is it under?
 LazyData: TRUE
+URL: http://github.com/tannermlove/avages
+BugReports: http://github.com/tannermlove/avages/issues
+Suggests: testthat,
+    knitr
+VignetteBuilder: knitr
+

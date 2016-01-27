@@ -1,0 +1,21 @@
+---
+title: "Avages"
+author: "Tanner Love"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Avages}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+INTRODUCTION
+
+The avages package includes functions which quickly offer information pertaining to the ages of the professors at Williams College in Williamstown, MA in each year from 2004 to 2014. More specifically, avages gives the average age of Williams professors, the name(s) and age(s) of the youngest/oldest professor(s), a visual display of the distribution of ages, and a graphical representation of the change in mean age each year.
+
+BACKGROUND
+
+Avages functions all rely on information about faculty posted by Williams College in its annual Course Catalog. This package contains copies of said information for each year from 2004 to 2014, which was quickly pasted into plain text files and saved in avages' inst/extdata directory. Each of avages' functions parse the data published by Williams for its corresponding year. Avages returns the aforementioned information about the ages of Williams professors by identifying the year in which each faculty member obtained his/her undergradduate degree, and then estimating his/her age assuming that, on average, undergradduate degrees were received at age 22. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty each year. Avages' functions ignore this handful of faculty in their calculations.
+
+From 2004 to 2014, Williams used the same format for posting information about its professors into the course catalogue (i.e. "Daniel P. Aalberts Associate Professor of Physics B.S. (1989) M.I.T.; Ph.D. (1994) M.I.T."). Thus, all of avages' functions rely on essentially the same code to give output pertaining to years 2004 through 2013. For 2014, however, Williams changed the style of the Course Catalogue (to "Daniel P. Aalberts, Professor of Physics, 1989, BS, MA Institute of Technology, 1994, PHD, MA Institute of Technology"). Thus, avages' functions rely on different code to give output pertaining to 2014.
+
+
