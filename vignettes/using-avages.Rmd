@@ -463,7 +463,7 @@ age_hist <- function(x) {
     # converts vector of strings into integers so math can be done
     ages <- x - years_numvec + 22
     hist(ages, seq(20, 100), col = 644, main = "Prof Ages in 2014",
-      xlab = "Age")
+      xlab = "Age", ylim = c(0, 20))
 
   } else {
     stop('argument not an integer on [2004, 2014]')
