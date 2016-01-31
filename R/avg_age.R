@@ -92,7 +92,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2011) {
+  }
+  else if (x == 2011) {
     prof_info <- system.file("extdata", "2011williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -126,7 +127,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2010) {
+  }
+  else if (x == 2010) {
     prof_info <- system.file("extdata", "2010williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -160,7 +162,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2009) {
+  }
+  else if (x == 2009) {
     prof_info <- system.file("extdata", "2009williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -194,7 +197,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2008) {
+  }
+  else if (x == 2008) {
     prof_info <- system.file("extdata", "2008williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -228,7 +232,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2007) {
+  }
+  else if (x == 2007) {
     prof_info <- system.file("extdata", "2007williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -262,7 +267,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2006) {
+  }
+  else if (x == 2006) {
     prof_info <- system.file("extdata", "2006williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -296,7 +302,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2005) {
+  }
+  else if (x == 2005) {
     prof_info <- system.file("extdata", "2005williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -330,7 +337,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2004) {
+  }
+  else if (x == 2004) {
     prof_info <- system.file("extdata", "2004williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
@@ -364,7 +372,8 @@ avg_age <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     mean(ages)
-  } else if (x == 2014) {
+  }
+  else if (x == 2014) {
     prof_info <- system.file("extdata", "2014williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
     #transform plain text document with 2014 prof info into a vector of strings
@@ -398,7 +407,8 @@ avg_age <- function(x) {
     # converts vector of strings into integers so math can be done
     ages <- x - years_numvec + 22
     mean(ages)
-  } else {
+  }
+  else {
     stop('argument not an integer on [2004, 2014]')
   }
 }
