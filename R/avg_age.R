@@ -379,7 +379,8 @@ avg_age <- function(x) {
     #transform plain text document with 2014 prof info into a vector of strings
     prof_info_charvec1 <- prof_info_charvec[!grepl("MBA", prof_info_charvec, fixed = TRUE)]
     #only want to estimate ages with undergrad degrees; can't have MBA interfering with BA
-    prof_info_charvec2 <- prof_info_charvec1[!grepl("MBA", prof_info_charvec1, fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("ABD", prof_info_charvec1, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have ABD interfering with AB
 
     pos_of_BA <- grep("BA", prof_info_charvec2, fixed = TRUE)
     pos_of_BA_dates <- pos_of_BA - 1
