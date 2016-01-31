@@ -414,6 +414,6 @@ age_hist <- function(x) {
       xlab = "Age")
 
   } else {
-    print("argument of mean_age function must be an integer representing a year from 2004 to 2014")
+    stop('argument not an integer on [2004, 2014]')
   }
 }

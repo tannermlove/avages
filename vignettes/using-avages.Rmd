@@ -9,21 +9,466 @@ header-includes:
     - \fancyfoot[LE,RO]{\thepage}
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Avages}
+  %\VignetteIndexEntry{Using the avages package}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-Introduction
-------------
+```{r, echo = FALSE}
+      knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+### Introduction
 
-The __avages__ package includes functions which quickly offer information pertaining to the ages of the professors at Williams College in Williamstown, MA in each year from 2004 to 2014. More specifically, avages gives the average age of Williams professors, the name(s) and age(s) of the youngest/oldest professor(s), a visual display of the distribution of ages, and a graphical representation of the change in mean age each year.
+The __avages__ package includes functions which quickly offer information pertaining to the ages of the professors at Williams College in Williamstown, MA in each year from 2004 to 2014. More specifically, avages gives, for each year, the average age of Williams professors, the name(s) and age(s) of the youngest/oldest professor(s), and a visual display of the distribution of ages. Additionally, avages gives a graphical representation of the change in mean ages from 2004 to 2014.
 
-Background
-------------
+### Background
 
-Avages' functions all rely on information about faculty posted by Williams College in its annual Course Catalog (http://web.williams.edu/admin/registrar//catalog/archive.html). This package contains copies of said information for each year from 2004 to 2014, which was quickly pasted into plain text files and saved in avages' inst/extdata directory. Each of avages' functions parse the data published by Williams to give output pertaining to a particular year by identifying the year in which each faculty member obtained his/her undergradduate degree, and then estimating his/her age assuming that, on average, undergradduate degrees were received at age 22. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty. Avages' functions ignore this handful of faculty in their calculations. Williams did not post years of degrees in 2015, so avages does not consider 2015.
+Avages' functions all rely on information about faculty posted by Williams College in its annual Course Catalog (http://web.williams.edu/admin/registrar//catalog/archive.html). The avages package contains copies of said information for each year from 2004 to 2014, which is stored as plain text files in avages' inst/extdata directory. Each of avages' functions parse the data published by Williams College to give output pertaining to a particular year by first identifying the year in which each faculty member obtained his/her undergradduate degree and then estimating his/her age assuming that, on average, undergradduate degrees were received at age 22. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty. Avages' functions ignore this handful of faculty in their calculations. Williams did not post years of degrees in 2015, so avages does not consider 2015.
 
 
-From 2004 to 2014, Williams used the same format for posting information about its professors into the course catalogue (i.e. "Daniel P. Aalberts Associate Professor of Physics B.S. (1989) M.I.T.; Ph.D. (1994) M.I.T."). Thus, all of avages' functions rely on essentially the same code to give output pertaining to years 2004 through 2013. For 2014, however, Williams changed the style of the Course Catalogue (to "Daniel P. Aalberts, Professor of Physics, 1989, BS, MA Institute of Technology, 1994, PHD, MA Institute of Technology"). Thus, avages' functions rely on different code to give output pertaining to 2014.
+From 2004 to 2014, Williams used the same format for posting information about its professors into the course catalogue (i.e. "Daniel P. Aalberts Associate Professor of Physics B.S. (1989) M.I.T.; Ph.D. (1994) M.I.T."). Thus, all of avages' functions rely on essentially the same code to give output pertaining to years 2004 through 2013. For 2014, however, Williams changed the style of the facutly information section of the Course Catalogue (to "Daniel P. Aalberts, Professor of Physics, 1989, BS, MA Institute of Technology, 1994, PHD, MA Institute of Technology"). Because the 2014 catalogue reports the year in which the undergraduate degree was obtained *before* the title of the degree (rather than *after*, as in the 2004 through 2013 Course Catalogues), avages' functions rely on different code to give output pertaining to 2014.
+
+## Average Ages
+
+Avages contains a function avg_age which returns the average age of professors in a given year. To determine the average age of professors in 2014, for example, call the avg_age function on the integer 2014.
+
+> avg_age(2014)
+[1] 49.27604
+
+If avg_age is called on an argument that is not an integer on [2004, 2014], avg_age will return an error message. 
+
+## Oldest Professors
+
+The oldst function returns the name(s) and age of the oldest professor(s) in a given year. To determine the oldest professor employed at Williams in 2014, for example, call the oldst function on the integer 2014.
+
+> oldst(2014)
+[1] "Charles B. Dew and Donald deB. Beaver, age 78"
+
+If oldst is called on an argument that is not an integer on [2004, 2014], oldst will return an error message.
+
+## Youngest Professors
+
+The yngst function returns the name(s) and age of the youngest professor(s) in a given year. To determine the youngest professor employed at Williams in 2014, for example, call the yngst function on the integer 2014.
+
+> yngst(2014)
+[1] "Sarah A. Mirseyedi, age 25"
+
+If yngst is called on an argument that is not an integer on [2004, 2014], yngst will return an error message.
+
+## Distribution of Ages
+
+Avages' age_hist function produces a histogram displaying the frequency of each age in a given year. To produce such a histogram for the year 2014, for example, call age_hist on the integer 2014.
+
+```{r, echo = FALSE}
+age_hist <- function(x) {
+  if (x == 2013) {
+    prof_info <- system.file("extdata", "2013williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    #transform plain text document with 2013 prof info into a vector of strings
+
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have MBA interfering with BA
+
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D.", prof_info_charvec1, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have ABD interfering with AB
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    #dates that undergrad degrees were receieved always appear 1 word after degree titles in Williams catalogue
+
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    # get rid of parentheses around years so they can be converted from strings to integers
+
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    # gets rid of any words that may have slipped through
+
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    # because Williams 2012-2013 catalogue accidentally reports that A. Levitt received B.F.A in 202 rather than 2003
+
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+    # because Williams 2011-2012 catalogue accidentally reports that J. Joosten received BA in 2022 rather than 2002
+
+    years_numvec <- strtoi(years_charvec4)
+    # converts vector of strings into integers so that math can be done
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "red", main = "Prof Ages in 2013",
+      xlab = "Age")
+  }
+  # code the exact same as 2013 for 2012 thru 2004 because williams catalogue faculty sections were of same format. 2014 reported year before degree, so code is different.
+  # ------------------------------------------------------------------------------
+
+  else if (x == 2012) {
+    prof_info <- system.file("extdata", "2012williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "yellow", main = "Prof Ages in 2012",
+      xlab = "Age")
+  } else if (x == 2011) {
+    prof_info <- system.file("extdata", "2011williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "green", main = "Prof Ages in 2011",
+      xlab = "Age")
+  } else if (x == 2010) {
+    prof_info <- system.file("extdata", "2010williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "violet", main = "Prof Ages in 2010",
+      xlab = "Age")
+  } else if (x == 2009) {
+    prof_info <- system.file("extdata", "2009williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "orange", main = "Prof Ages in 2009",
+      xlab = "Age")
+  } else if (x == 2008) {
+    prof_info <- system.file("extdata", "2008williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "blue", main = "Prof Ages in 2008",
+      xlab = "Age")
+  } else if (x == 2007) {
+    prof_info <- system.file("extdata", "2007williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "pink", main = "Prof Ages in 2007",
+      xlab = "Age")
+  } else if (x == 2006) {
+    prof_info <- system.file("extdata", "2006williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "cyan", main = "Prof Ages in 2006",
+      xlab = "Age")
+  } else if (x == 2005) {
+    prof_info <- system.file("extdata", "2005williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = "purple", main = "Prof Ages in 2005",
+      xlab = "Age")
+  } else if (x == 2004) {
+    prof_info <- system.file("extdata", "2004williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    prof_info_charvec1 <- prof_info_charvec[!grepl("M.B.A.", prof_info_charvec,
+      fixed = TRUE)]
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("A.B.D", prof_info_charvec1,
+      fixed = TRUE)]
+    pos_of_BA <- grep("B.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA + 1
+    pos_of_BS <- grep("B.S.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS + 1
+    pos_of_BM <- grep("B.M.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM + 1
+    pos_of_BE <- grep("B.E.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE + 1
+    pos_of_AB <- grep("A.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB + 1
+    pos_of_BFA <- grep("—B.F.A.", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA + 1
+    pos_of_BPhil <- grep("B.Phil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil + 1
+    pos_of_SB <- grep("S.B.", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    years_charvec <- gsub("(", "", prof_info_charvec2[pos_undergrad_dates],
+      fixed = TRUE)
+    years_charvec1 <- gsub(")", "", years_charvec, fixed = TRUE)
+    years_charvec2 <- years_charvec1[!grepl("[a-z]", years_charvec1)]
+    years_charvec3 <- gsub("203", "2003", years_charvec2, fixed = TRUE)
+    years_charvec4 <- gsub("2022", "2002", years_charvec3, fixed = TRUE)
+
+    years_numvec <- strtoi(years_charvec4)
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = 128, main = "Prof Ages in 2004",
+      xlab = "Age")
+  } else if (x == 2014) {
+    prof_info <- system.file("extdata", "2014williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    #transform plain text document with 2014 prof info into a vector of strings
+    prof_info_charvec1 <- prof_info_charvec[!grepl("MBA", prof_info_charvec, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have MBA interfering with BA
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("MBA", prof_info_charvec1, fixed = TRUE)]
+
+    pos_of_BA <- grep("BA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA - 1
+    pos_of_BS <- grep("BS", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS - 1
+    pos_of_BM <- grep("BM", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM - 1
+    pos_of_BE <- grep("BE", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE - 1
+    pos_of_AB <- grep("AB", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB - 1
+    pos_of_BFA <- grep("BFA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA - 1
+    pos_of_BPhil <- grep("BPhil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil - 1
+    pos_of_SB <- grep("SB", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    # dates of undergrad degrees always appear one word before degree title in Williams catalogue
+
+    years_charvec <- gsub(",", "", prof_info_charvec2[pos_undergrad_dates])
+    # get rid of commas after years so vector can be converted from strings to integers
+
+    years_numvec <- strtoi(years_charvec)
+    # converts vector of strings into integers so math can be done
+    ages <- x - years_numvec + 22
+    hist(ages, seq(20, 100), col = 644, main = "Prof Ages in 2014",
+      xlab = "Age")
+
+  } else {
+    stop('argument not an integer on [2004, 2014]')
+  }
+}
+
+age_hist(2014)
+```
 
 

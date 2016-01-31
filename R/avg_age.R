@@ -399,6 +399,6 @@ avg_age <- function(x) {
     ages <- x - years_numvec + 22
     mean(ages)
   } else {
-    print("argument of avg_age function must be an integer representing a year from 2004 to 2014")
+    stop('argument not an integer on [2004, 2014]')
   }
 }
