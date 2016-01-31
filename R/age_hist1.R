@@ -1,3 +1,12 @@
+#' Distribution of ages of professors at Williams College
+#'
+#' Returns a histogram of ages of professors at Williams College for any year from 2004 to 2014.
+#'
+#' For this to work properly, argument must be an integer representing a year from 2004 to 2014.
+#'
+#'@param \code{x} An integer on [2004, 2014]
+#'
+#'
 age_hist1 <- function(x) {
   if (x == 2013) {
     hist(ages_1(x), seq(20, 100), col = "red", main = "Prof Ages in 2013",
