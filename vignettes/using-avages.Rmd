@@ -58,6 +58,8 @@ If yngst is called on an argument that is not an integer on [2004, 2014], yngst 
 
 Avages' age_hist function produces a histogram displaying the frequency of each age in a given year. To produce such a histogram for the year 2014, for example, call age_hist on the integer 2014.
 
+> age_hist(2014)
+
 ```{r, echo = FALSE}
 age_hist <- function(x) {
   if (x == 2013) {
