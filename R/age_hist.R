@@ -96,7 +96,7 @@ age_hist <- function(x) {
     years_numvec <- strtoi(years_charvec4)
     ages <- x - years_numvec + 22
     hist(ages, seq(20, 100), col = "yellow", main = "Prof Ages in 2012",
-      xlab = "Age")
+      xlab = "Age", ylim = c(0, 20))
   }
   else if (x == 2011) {
     prof_info <- system.file("extdata", "2011williamsprofs.txt", package = "avages")
