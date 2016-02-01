@@ -8,40 +8,29 @@
 #'
 
 oldst <- function(x) {
-  if (x == 2013) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2012) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2011) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2010) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2009) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2008) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2007) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2006) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2005) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2004) {
-    paste("Henry J. Bruton, age", max(ages_1(x)))
-  }
-  else if (x == 2014) {
-    paste("Charles B. Dew and Donald deB. Beaver, age", max(ages_2(x)))
-  }
-  else {
-    stop('argument not an integer on [2004, 2014]')
-  }
-}
+    if (x == 2013) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2012) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2011) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2010) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2009) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2008) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2007) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2006) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2005) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2004) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2014) {
+        paste("Charles B. Dew and Donald deB. Beaver, age", max(ages_2(x)))
+    } else {
+        stop("argument not an integer on [2004, 2014]")
+    }
+} 

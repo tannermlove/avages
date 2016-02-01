@@ -1,3 +1,9 @@
+#' Change in mean age of professors at Williams College from 2004 to 2014
+#'
+#' Returns a graphical representation of the change in mean age of professors at Williams College from 2004 to 2014
+#'
+
+
 age_change <- function() {
   ages1 <- c(avg_age(2004), avg_age(2005), avg_age(2006), avg_age(2007), avg_age(2008), avg_age(2009), avg_age(2010), avg_age(2011), avg_age(2012), avg_age(2013), avg_age(2014))
   # generate mean ages as y values
