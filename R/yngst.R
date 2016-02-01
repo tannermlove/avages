@@ -17,7 +17,7 @@ yngst <- function(x) {
     } else if (x == 2010) {
         paste("Donald Brooks, Marshall K. Creighton, and Christopher Himes, age", min(ages_1(x)))
     } else if (x == 2009) {
-        paste("Nicholas T. Goodboddy and Margaret Bundy Scott, age", min(ages_1(x)))
+        paste("Nicholas T. Goodbody and Margaret Bundy Scott, age", min(ages_1(x)))
     } else if (x == 2008) {
         paste("Charles N. Howard, age", min(ages_1(x)))
     } else if (x == 2007) {
@@ -34,4 +34,4 @@ yngst <- function(x) {
         stop("argument not an integer on [2004, 2014]")
     }
 }
- 
+
