@@ -1,3 +1,11 @@
+#' Age vector generator 2
+#'
+#' Generates a vector filled with integers representing the ages of professors at Williams College in 2014.
+#'
+#' For this to work properly, argument must be the integer 2014.
+#'
+#'@param \code{x} the integer 2014
+#'
 ages_2 <- function(x) {
     prof_info <- system.file("extdata", "2014williamsprofs.txt", package = "avages")
     prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)

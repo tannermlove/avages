@@ -16,5 +16,7 @@ URL: http://github.com/tannermlove/avages
 BugReports: http://github.com/tannermlove/avages/issues
 Suggests: testthat,
     knitr
+Imports:
+       ggplot2
 VignetteBuilder: knitr
 

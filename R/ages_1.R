@@ -1,3 +1,11 @@
+#' Age vector generator 1
+#'
+#' Generates a vector filled with integers representing the ages of professors at Williams College in any year from 2004 to 2013.
+#'
+#' For this to work properly, argument must be an integer representing a year from 2004 to 2013.
+#'
+#'@param \code{x} An integer on [2004, 2013]
+#'
 ages_1 <- function(x) {
   if (x == 2013) {
     prof_info <- system.file("extdata", "2013williamsprofs.txt", package = "avages")
