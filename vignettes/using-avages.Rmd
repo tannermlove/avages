@@ -314,8 +314,8 @@ age_change <- function() {
 
   library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
   plot <- ggplot(profdata, aes(years1, ages1)) + geom_point(color="darkviolet")
-  plot <- plot + ggtitle("Change in Mean Age")
-  plot <- plot + theme(plot.title = element_text(size = 15, face = "bold", vjust = 1, hjust = 0.5))
+  plot <- plot + ggtitle("Change in Mean Age from 2004 to 2014")
+  plot <- plot + theme(plot.title = element_text(size = 10, face = "bold", vjust = 1, hjust = 0.5))
   #title graph
 
   plot <- plot + labs(x="Year", y="Age (yrs)")
