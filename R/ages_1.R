@@ -1,6 +1,6 @@
 #' Age vector generator 1
 #'
-#' Generates a vector filled with integers representing the ages of professors at Williams College in any year from 2004 to 2013.
+#' Generates a vector filled with integers representing the ages of professors/lecturers at Williams College in any year from 2004 to 2013.
 #'
 #' For this to work properly, argument must be an integer representing a year from 2004 to 2013.
 #'

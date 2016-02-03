@@ -2,7 +2,7 @@
 % Please edit documentation in R/avg_age.R
 \name{avg_age}
 \alias{avg_age}
-\title{Average age of professors at Williams College.}
+\title{Average age of professors/lecturers at Williams College.}
 \usage{
 avg_age(x)
 }
@@ -10,7 +10,7 @@ avg_age(x)
 \item{\code{x}}{An integer on [2004, 2014]}
 }
 \description{
-Returns the average age of professors at Williams College in any year from 2004 to 2014.
+Returns the average age of professors and lecturers at Williams College in any year from 2004 to 2014.
 }
 \details{
 For this to work properly, argument must be an integer representing a year from 2004 to 2014.

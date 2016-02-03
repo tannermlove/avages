@@ -1,6 +1,6 @@
-#' Change in mean age of professors at Williams College from 2004 to 2014
+#' Change in mean age of professors/lecturers at Williams College from 2004 to 2014
 #'
-#' Returns a graphical representation of the change in mean age of professors at Williams College from 2004 to 2014
+#' Returns a graphical representation of the change in mean age of professors/lecturers at Williams College from 2004 to 2014
 #'
 
 

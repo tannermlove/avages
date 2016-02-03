@@ -1,6 +1,6 @@
-#' Distribution of ages of professors at Williams College
+#' Distribution of ages of professors/lecturers at Williams College
 #'
-#' Returns a histogram of ages of professors at Williams College for any year from 2004 to 2014.
+#' Returns a histogram of ages of professors/lecturers at Williams College for any year from 2004 to 2014.
 #'
 #' For this to work properly, argument must be an integer representing a year from 2004 to 2014.
 #'

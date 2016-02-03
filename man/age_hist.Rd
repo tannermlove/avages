@@ -2,7 +2,7 @@
 % Please edit documentation in R/age_hist.R
 \name{age_hist}
 \alias{age_hist}
-\title{Distribution of ages of professors at Williams College}
+\title{Distribution of ages of professors/lecturers at Williams College}
 \usage{
 age_hist(x)
 }
@@ -10,7 +10,7 @@ age_hist(x)
 \item{\code{x}}{An integer on [2004, 2014]}
 }
 \description{
-Returns a histogram of ages of professors at Williams College for any year from 2004 to 2014.
+Returns a histogram of ages of professors/lecturers at Williams College for any year from 2004 to 2014.
 }
 \details{
 For this to work properly, argument must be an integer representing a year from 2004 to 2014.

@@ -1,6 +1,6 @@
-#' Average age of professors at Williams College.
+#' Average age of professors/lecturers at Williams College.
 #'
-#' Returns the average age of professors at Williams College in any year from 2004 to 2014.
+#' Returns the average age of professors and lecturers at Williams College in any year from 2004 to 2014.
 #'
 #' For this to work properly, argument must be an integer representing a year from 2004 to 2014.
 #'

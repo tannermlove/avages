@@ -2,7 +2,7 @@
 % Please edit documentation in R/yngst.R
 \name{yngst}
 \alias{yngst}
-\title{Youngest professor at Williams College}
+\title{Youngest professor/lecturer at Williams College}
 \usage{
 yngst(x)
 }
@@ -10,7 +10,7 @@ yngst(x)
 \item{\code{x}}{An integer on [2004, 2014]}
 }
 \description{
-Returns the name(s) and age(s) of the youngest professor(s) at Williams college in a year from 2004 to 2014.
+Returns the name(s) and age of the youngest professor/lecturer(s) at Williams college in a year from 2004 to 2014.
 }
 \details{
 For this to work properly, argument must be an integer representing a year from 2004 to 2014.

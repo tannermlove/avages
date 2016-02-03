@@ -2,11 +2,11 @@
 % Please edit documentation in R/age_change.R
 \name{age_change}
 \alias{age_change}
-\title{Change in mean age of professors at Williams College from 2004 to 2014}
+\title{Change in mean age of professors/lecturers at Williams College from 2004 to 2014}
 \usage{
 age_change()
 }
 \description{
-Returns a graphical representation of the change in mean age of professors at Williams College from 2004 to 2014
+Returns a graphical representation of the change in mean age of professors/lecturers at Williams College from 2004 to 2014
 }
 

@@ -1,6 +1,6 @@
-#' Oldest professor at Williams College
+#' Oldest professor/lecturer at Williams College
 #'
-#' Returns the name(s) and age(s) of the oldest professor(s) at Williams college in a year from 2004 to 2014.
+#' Returns the name(s) and age of the oldest professor/lecturer(s) at Williams college in a year from 2004 to 2014.
 #'
 #' For this to work properly, argument must be an integer representing a year from 2004 to 2014.
 #'

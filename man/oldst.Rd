@@ -2,7 +2,7 @@
 % Please edit documentation in R/oldst.R
 \name{oldst}
 \alias{oldst}
-\title{Oldest professor at Williams College}
+\title{Oldest professor/lecturer at Williams College}
 \usage{
 oldst(x)
 }
@@ -10,7 +10,7 @@ oldst(x)
 \item{\code{x}}{An integer on [2004, 2014]}
 }
 \description{
-Returns the name(s) and age(s) of the oldest professor(s) at Williams college in a year from 2004 to 2014.
+Returns the name(s) and age of the oldest professor/lecturer(s) at Williams college in a year from 2004 to 2014.
 }
 \details{
 For this to work properly, argument must be an integer representing a year from 2004 to 2014.

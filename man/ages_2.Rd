@@ -10,7 +10,7 @@ ages_2(x)
 \item{\code{x}}{the integer 2014}
 }
 \description{
-Generates a vector filled with integers representing the ages of professors at Williams College in 2014.
+Generates a vector filled with integers representing the ages of professors/lecturers at Williams College in 2014.
 }
 \details{
 For this to work properly, argument must be the integer 2014.
