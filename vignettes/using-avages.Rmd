@@ -8,7 +8,6 @@ header-includes:
     - \lhead{}
     - \chead{}
     - \rhead{AVAGES}
-    
 ---
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
