@@ -10,7 +10,7 @@ Description: Ages of Professors at Williams College from 2004 to 2014. It
     from 2004 to 2014, functions that return histograms of ages each year, and
     functions that return the name(s) and age(s) of the youngest and oldest
     professor(s) each year.
-License: What license is it under?
+License: CC0
 LazyData: TRUE
 URL: http://github.com/tannermlove/avages
 BugReports: http://github.com/tannermlove/avages/issues

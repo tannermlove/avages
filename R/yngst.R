@@ -7,6 +7,7 @@
 #'@param \code{x} An integer on [2004, 2014]
 #'
 
+
 yngst <- function(x) {
     if (x == 2013) {
         paste("Daniel Greenberg, age", min(ages_1(x)))
@@ -17,7 +18,7 @@ yngst <- function(x) {
     } else if (x == 2010) {
         paste("Donald Brooks, Marshall K. Creighton, and Christopher Himes, age", min(ages_1(x)))
     } else if (x == 2009) {
-        paste("Nicholas T. Goodbody and Margaret Bundy Scott, age", min(ages_1(x)))
+        paste("Nicholas T. Goodbody and Karen Russell, age", min(ages_1(x)))
     } else if (x == 2008) {
         paste("Charles N. Howard, age", min(ages_1(x)))
     } else if (x == 2007) {

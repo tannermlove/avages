@@ -7,6 +7,7 @@
 #'@param \code{x} An integer on [2004, 2014]
 #'
 
+
 oldst <- function(x) {
     if (x == 2013) {
         paste("Henry J. Bruton, age", max(ages_1(x)))
@@ -33,4 +34,4 @@ oldst <- function(x) {
     } else {
         stop("argument not an integer on [2004, 2014]")
     }
-} 
+}

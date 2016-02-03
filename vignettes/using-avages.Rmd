@@ -1,13 +1,13 @@
 ---
-title: "Avages"
+title: "__Avages__"
 author: "Tanner Love"
 header-includes:
-    - \usepackage{fancyhdr}
-    - \pagestyle{fancy}
-    - \fancyhead[CO,CE]{This is fancy}
-    - \fancyfoot[CO,CE]{So is this}
-    - \fancyfoot[LE,RO]{\thepage}
-output: rmarkdown::html_vignette
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \lhead{}
+- \chead{}
+- \rhead{AVAGES}
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{Using the avages package}
   %\VignetteEngine{knitr::rmarkdown}
@@ -18,11 +18,11 @@ vignette: >
 ```
 ## Introduction
 
-The __avages__ package includes functions which quickly offer information pertaining to the ages of the professors at Williams College in Williamstown, MA in each year from 2004 to 2014. More specifically, avages gives, for each year, the average age of Williams professors, the name(s) and age(s) of the youngest/oldest professor(s), and a visual display of the distribution of ages. Additionally, avages gives a graphical representation of the change in mean ages from 2004 to 2014.
+The __avages__ package includes functions which quickly offer information pertaining to the ages of the professors and lecturers at Williams College in Williamstown, MA in each year from 2004 to 2014. More specifically, avages gives, for each year, the average age of professors and lecturers, the name(s) and age(s) of the youngest and oldest professor(s) and lecturer(s), and a visual display of the distribution of ages. Additionally, avages gives a graphical representation of the change in mean ages from 2004 to 2014.
 
 ## Background
 
-Avages' functions all rely on information about faculty posted by Williams College in its annual Course Catalog (which can be found at http://web.williams.edu/admin/registrar//catalog/archive.html). The avages package contains copies of this information for each year from 2004 to 2014, which is stored as plain text files in avages' inst/extdata directory. Avages' main functions (avg_age, age_hist, oldst, yngst, and age_change) rely on the actions of two subsidiary functions (ages_1 and ages_2) which parse the text from the Course Catalogs and create a vector of ages of professors at Williams College for each year from 2004 to 2013 and 2014, respectively. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty. Avages' functions ignore this handful of faculty in their calculations. Williams College did not publish the years that factulty received degrees in the 2015 Course Catalog, so avages does not consider 2015.
+Avages' functions all rely on information about faculty posted by Williams College in its annual Course Catalog (which can be found at http://web.williams.edu/admin/registrar//catalog/archive.html). The avages package contains copies of this information for each year from 2004 to 2014, and it is stored as plain text files in avages' inst/extdata directory. Avages' main functions (avg_age, age_hist, oldst, yngst, and age_change) rely on the actions of two subsidiary functions (ages_1 and ages_2) which parse the text from the Course Catalogs and create a vector of ages of professors at Williams College for each year from 2004 to 2013 and 2014, respectively. Avages determines ages operating under the assumption that, on average, professors and lecturers received their undergraduate degrees at age 22. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty. Avages' functions ignore this handful of faculty in their calculations. Williams College did not publish the years that factulty received degrees in the 2015 Course Catalog, so avages does not consider 2015.
 
 ## Subisdiary Functions
 
@@ -39,7 +39,57 @@ The ages_2 function does basically the exact same thing. The differences are tha
 Avages contains a function avg_age which returns the average age of professors in a given year. To determine the average age of professors in 2014, for example, call the avg_age function on the integer 2014.
 
 > avg_age(2014)
-[1] 49.27604
+```{r, echo = FALSE}
+ages_2 <- function(x) {
+    prof_info <- system.file("extdata", "2014williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    #transform plain text document with 2014 prof info into a vector of strings
+    prof_info_charvec1 <- prof_info_charvec[!grepl("MBA", prof_info_charvec, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have MBA interfering with BA
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("ABD", prof_info_charvec1, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have ABD interfering with AB
+
+    pos_of_BA <- grep("BA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA - 1
+    pos_of_BS <- grep("BS", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS - 1
+    pos_of_BM <- grep("BM", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM - 1
+    pos_of_BE <- grep("BE", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE - 1
+    pos_of_AB <- grep("AB", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB - 1
+    pos_of_BFA <- grep("BFA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA - 1
+    pos_of_BPhil <- grep("BPhil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil - 1
+    pos_of_SB <- grep("SB", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    # dates of undergrad degrees always appear one word before degree title in Williams catalogue
+
+    years_charvec <- gsub(",", "", prof_info_charvec2[pos_undergrad_dates])
+    # get rid of commas after years so vector can be converted from strings to integers
+
+    years_numvec <- strtoi(years_charvec)
+    # converts vector of strings into integers so math can be done
+    ages <- x - years_numvec + 22
+}
+
+
+avg_age <- function(x) {
+    if (x == 2004 || x == 2005 || x == 2006 || x == 2007 || x == 2008 || x == 2009 || 
+        x == 2010 || x == 2011 || x == 2012 || x == 2013) {
+        mean(ages_1(x))
+    } else if (x == 2014) {
+        mean(ages_2(x))
+    } else {
+        stop("argument not an integer on [2004, 2014]")
+    }
+} 
+
+avg_age(2014)
+```
 
 The avg_age function relies on input from the subsidiary ages_1 and ages_2 functions, and simply finds the mean value of the age vectors these subsidiary functions produce for a given year.
 
@@ -50,7 +100,74 @@ If avg_age is called on an argument that is not an integer on [2004, 2014], avg_
 The oldst function returns the name(s) and age of the oldest professor(s) in a given year. To determine the oldest professor employed at Williams in 2014, for example, call the oldst function on the integer 2014.
 
 > oldst(2014)
-[1] "Charles B. Dew and Donald deB. Beaver, age 78"
+```{r, echo = FALSE}
+ages_2 <- function(x) {
+    prof_info <- system.file("extdata", "2014williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    #transform plain text document with 2014 prof info into a vector of strings
+    prof_info_charvec1 <- prof_info_charvec[!grepl("MBA", prof_info_charvec, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have MBA interfering with BA
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("ABD", prof_info_charvec1, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have ABD interfering with AB
+
+    pos_of_BA <- grep("BA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA - 1
+    pos_of_BS <- grep("BS", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS - 1
+    pos_of_BM <- grep("BM", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM - 1
+    pos_of_BE <- grep("BE", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE - 1
+    pos_of_AB <- grep("AB", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB - 1
+    pos_of_BFA <- grep("BFA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA - 1
+    pos_of_BPhil <- grep("BPhil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil - 1
+    pos_of_SB <- grep("SB", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    # dates of undergrad degrees always appear one word before degree title in Williams catalogue
+
+    years_charvec <- gsub(",", "", prof_info_charvec2[pos_undergrad_dates])
+    # get rid of commas after years so vector can be converted from strings to integers
+
+    years_numvec <- strtoi(years_charvec)
+    # converts vector of strings into integers so math can be done
+    ages <- x - years_numvec + 22
+}
+
+
+oldst <- function(x) {
+    if (x == 2013) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2012) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2011) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2010) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2009) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2008) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2007) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2006) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2005) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2004) {
+        paste("Henry J. Bruton, age", max(ages_1(x)))
+    } else if (x == 2014) {
+        paste("Charles B. Dew and Donald deB. Beaver, age", max(ages_2(x)))
+    } else {
+        stop("argument not an integer on [2004, 2014]")
+    }
+} 
+
+oldst(2014)
+```
 
 The oldst function relies on input from the subsidiary ages_1 and ages_2 functions, and finds the maximum value of the age vectors these subsidiary functions produce for a given year.
 
@@ -61,7 +178,74 @@ If oldst is called on an argument that is not an integer on [2004, 2014], oldst 
 The yngst function returns the name(s) and age of the youngest professor(s) in a given year. To determine the youngest professor employed at Williams in 2014, for example, call the yngst function on the integer 2014.
 
 > yngst(2014)
-[1] "Sarah A. Mirseyedi, age 25"
+```{r, echo = FALSE}
+ages_2 <- function(x) {
+    prof_info <- system.file("extdata", "2014williamsprofs.txt", package = "avages")
+    prof_info_charvec <- scan(prof_info, what = "character", quiet = TRUE)
+    #transform plain text document with 2014 prof info into a vector of strings
+    prof_info_charvec1 <- prof_info_charvec[!grepl("MBA", prof_info_charvec, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have MBA interfering with BA
+    prof_info_charvec2 <- prof_info_charvec1[!grepl("ABD", prof_info_charvec1, fixed = TRUE)]
+    #only want to estimate ages with undergrad degrees; can't have ABD interfering with AB
+
+    pos_of_BA <- grep("BA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BA_dates <- pos_of_BA - 1
+    pos_of_BS <- grep("BS", prof_info_charvec2, fixed = TRUE)
+    pos_of_BS_dates <- pos_of_BS - 1
+    pos_of_BM <- grep("BM", prof_info_charvec2, fixed = TRUE)
+    pos_of_BM_dates <- pos_of_BM - 1
+    pos_of_BE <- grep("BE", prof_info_charvec2, fixed = TRUE)
+    pos_of_BE_dates <- pos_of_BE - 1
+    pos_of_AB <- grep("AB", prof_info_charvec2, fixed = TRUE)
+    pos_of_AB_dates <- pos_of_AB - 1
+    pos_of_BFA <- grep("BFA", prof_info_charvec2, fixed = TRUE)
+    pos_of_BFA_dates <- pos_of_BFA - 1
+    pos_of_BPhil <- grep("BPhil", prof_info_charvec2, fixed = TRUE)
+    pos_of_BPhil_dates <- pos_of_BPhil - 1
+    pos_of_SB <- grep("SB", prof_info_charvec2, fixed = TRUE)
+    pos_of_SB_dates <- pos_of_SB + 1
+    pos_undergrad_dates <- c(pos_of_BA_dates, pos_of_BS_dates, pos_of_BM_dates, pos_of_BE_dates, pos_of_AB_dates, pos_of_BFA_dates, pos_of_BPhil_dates, pos_of_SB_dates)
+    # dates of undergrad degrees always appear one word before degree title in Williams catalogue
+
+    years_charvec <- gsub(",", "", prof_info_charvec2[pos_undergrad_dates])
+    # get rid of commas after years so vector can be converted from strings to integers
+
+    years_numvec <- strtoi(years_charvec)
+    # converts vector of strings into integers so math can be done
+    ages <- x - years_numvec + 22
+}
+
+
+yngst <- function(x) {
+    if (x == 2013) {
+        paste("Daniel Greenberg, age", min(ages_1(x)))
+    } else if (x == 2012) {
+        paste("Daniel Greenberg, age", min(ages_1(x)))
+    } else if (x == 2011) {
+        paste("Daniel Greenberg age", min(ages_1(x)))
+    } else if (x == 2010) {
+        paste("Donald Brooks, Marshall K. Creighton, and Christopher Himes, age", min(ages_1(x)))
+    } else if (x == 2009) {
+        paste("Nicholas T. Goodbody and Karen Russell, age", min(ages_1(x)))
+    } else if (x == 2008) {
+        paste("Charles N. Howard, age", min(ages_1(x)))
+    } else if (x == 2007) {
+        paste("Robert Michelin, age", min(ages_1(x)))
+    } else if (x == 2006) {
+        paste("Zafrir Levy, age", min(ages_1(x)))
+    } else if (x == 2005) {
+        paste("Zafrir Levy, age", min(ages_1(x)))
+    } else if (x == 2004) {
+        paste("Zafrir Levy, age", min(ages_1(x)))
+    } else if (x == 2014) {
+        paste("Sarah A. Mirseyedi, age", min(ages_2(x)))
+    } else {
+        stop("argument not an integer on [2004, 2014]")
+    }
+}
+
+yngst(2014)
+```
 
 The yngst function relies on input from the subsidiary ages_1 and ages_2 functions, and finds the minimum value of the age vectors these subsidiary functions produce for a given year.
 
@@ -164,6 +348,7 @@ age_hist <- function(x) {
 age_hist(2014)
 ```
 
+
 The age_hist function relies on input from the subsidiary ages_1 and ages_2 functions, and produces histograms from the age vectors these subsidiary functions produce for a given year.
 
 ### Change in Mean Age Over Time
@@ -172,7 +357,7 @@ Avages' age_change function produces a plot which displays the change in mean ag
 
 > age_change()
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, warning = FALSE}
 ages_1 <- function(x) {
   if (x == 2013) {
     prof_info <- system.file("extdata", "2013williamsprofs.txt", package = "avages")
@@ -303,41 +488,45 @@ avg_age <- function(x) {
 }
 
 age_change <- function() {
-  ages1 <- c(avg_age(2004), avg_age(2005), avg_age(2006), avg_age(2007), avg_age(2008), avg_age(2009), avg_age(2010), avg_age(2011), avg_age(2012), avg_age(2013), avg_age(2014))
-  # generate mean ages as y values
+    ages1 <- c(avg_age(2004), avg_age(2005), avg_age(2006), avg_age(2007), avg_age(2008),
+        avg_age(2009), avg_age(2010), avg_age(2011), avg_age(2012), avg_age(2013), avg_age(2014))
+    # generate mean ages as y values
 
-  years1 <- 2004:2014
-  # generate x values
+    years1 <- 2004:2014
+    # generate x values
 
-  profdata <- data.frame(years1, ages1)
-  # create a data frame
+    profdata <- data.frame(years1, ages1)
+    # create a data frame
 
-  library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
-  plot <- ggplot(profdata, aes(years1, ages1)) + geom_point(color="darkviolet")
-  plot <- plot + ggtitle("Change in Mean Age from 2004 to 2014")
-  plot <- plot + theme(plot.title = element_text(size = 10, face = "bold", vjust = 1, hjust = 0.5))
-  #title graph
+    library(ggplot2, warn.conflicts = FALSE, quietly = TRUE)
+    plot <- ggplot(profdata, aes(years1, ages1)) + geom_point(color = "darkviolet")
+    plot <- plot + ggtitle("Mean Age from 2004 to 2014")
+    plot <- plot + theme(plot.title = element_text(size = 17.5, face = "bold", vjust = 1,
+        hjust = 0.5))
+    # title graph
 
-  plot <- plot + labs(x="Year", y="Age (yrs)")
-  # label axes
+    plot <- plot + labs(x = "Year", y = "Age (yrs)")
+    # label axes
 
-  plot <- plot + theme(axis.text.x = element_text(angle = 50, size = 10, face = "bold", color = "darkviolet"))
-  plot <- plot + theme(axis.title.x = element_text(face = "bold", hjust = 0.5, vjust = 0.8))
-  # format x axis
+    plot <- plot + theme(axis.text.x = element_text(angle = 50, size = 10, face = "bold",
+        color = "darkviolet"))
+    plot <- plot + theme(axis.title.x = element_text(face = "bold", hjust = 0.5, vjust = 0.8))
+    # format x axis
 
-  plot <- plot + theme(axis.text.y = element_text(size = 10, face = "bold", color = "darkviolet"))
-  plot <- plot + theme(axis.title.y = element_text(face = "bold", hjust = 0.5, vjust = 0.8))
-  plot <- plot + ylim(c(0, 60))
-  # format y axis
+    plot <- plot + theme(axis.text.y = element_text(size = 10, face = "bold", color = "darkviolet"))
+    plot <- plot + theme(axis.title.y = element_text(face = "bold", hjust = 0.5, vjust = 0.8))
+    plot <- plot + ylim(c(0, 60))
+    # format y axis
 
-  plot <- plot + theme(plot.background = element_rect(fill = "white"))
-  plot <- plot + theme(panel.background = element_rect(fill = "gold1"))
-  # format plot/panel backgrounds
+    plot <- plot + theme(plot.background = element_rect(fill = "white"))
+    plot <- plot + theme(panel.background = element_rect(fill = "gold1"))
+    # format plot/panel backgrounds
 
-  plot
+    plot
 }
-
+  
 age_change()
+
 ```
 
 ## Avages Results
@@ -348,7 +537,7 @@ age_change()
 | 2005  |  46.8    |        Henry J. Bruton (84)             |  Zafrir Levy (26) | 
 | 2006  |  47.1    |        Henry J. Bruton (85)               |  Zafrir Levy (27)  |
 | 2007  |  47.0    |        Henry J. Bruton (86)          |  Robert Michelin (26)|  
-| 2008  |  47.6    |        Henry J. Bruton (87)                 |  Charles N. Howard (23) | 
+| 2008  |  47.6    |        Henry J. Bruton (87)                 |  Charles N. Howard and Karen Russell (23) | 
 | 2009  |  48.0    |        Henry J. Bruton (88)               |  Nicholas T. Goodbody (28)|  
 | 2010  |  49.3    |        Henry J. Bruton (89)                 |  Donald Brooks, Marshall K. Creighton, and Christopher Himes (30)  |
 | 2011  |  49.7    |        Henry J. Bruton (90)                |  Daniel Greenberg (25) |
