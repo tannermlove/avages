@@ -1,17 +1,14 @@
 ---
 title: "__Avages__"
 author: "Tanner Love"
+output: pdf_document
 header-includes:
     - \usepackage{fancyhdr}
     - \pagestyle{fancy}
     - \lhead{}
     - \chead{}
     - \rhead{AVAGES}
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Using avages}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+    
 ---
 
 ## Introduction
@@ -20,15 +17,15 @@ The __avages__ package includes functions which quickly offer information pertai
 
 ## Background
 
-Avages' functions all rely on information about faculty posted by Williams College in its annual Course Catalog (which can be found at http://web.williams.edu/admin/registrar//catalog/archive.html). The avages package contains copies of this information for each year from 2004 to 2014, and it is stored as plain text files in avages' inst/extdata directory. Avages' main functions (avg_age, age_hist, oldst, yngst, and age_change) rely on the actions of two subsidiary functions (ages_1 and ages_2) which parse the text from the Course Catalogs and create a vector of ages of professors at Williams College for each year from 2004 to 2013 and 2014, respectively. Avages determines ages operating under the assumption that, on average, professors and lecturers received their undergraduate degrees at age 22. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty. Avages' functions ignore this handful of faculty in their calculations. Williams College did not publish the years that factulty received degrees in the 2015 Course Catalog, so avages does not consider 2015.
+Avages' functions all rely on information about faculty posted by Williams College in its annual Course Catalog (which can be found at http://web.williams.edu/admin/registrar//catalog/archive.html). The avages package contains copies of this information for each year from 2004 to 2014, which is stored as plain text files in avages' inst/extdata directory. Avages' main functions (avg_age, age_hist, oldst, yngst, and age_change) rely on the actions of two subsidiary functions (ages_1 and ages_2) which parse the text from the Course Catalogs and create a vector of ages for each year from 2004 to 2013 and for 2014, respectively. Avages determines ages operating under the assumption that, on average, professors and lecturers received their undergraduate degrees at age 22. For years 2004 through 2014, Williams posted the year an undergradduate degree was obtained for the vast majority of faculty members, but excluded this information for a handful of faculty. Avages' functions ignore this handful of faculty in their calculations. Williams College did not publish the years that factulty received degrees in the 2015 Course Catalog, so avages does not consider 2015.
 
 ## Subsidiary Functions
 
-From 2004 to 2013, Williams used the same format for posting information about its professors in the Course Catalog (i.e. "Daniel P. Aalberts Associate Professor of Physics B.S. (1989) M.I.T.; Ph.D. (1994) M.I.T."). Therefore, the same code effectively parses the 2004-2013 catalogs and creates a vector filled with the ages of professors at Williams for each of these years. For 2014, however, Williams changed the style of the facutly information section of the Course Catalogue (to "Daniel P. Aalberts, Professor of Physics, 1989, BS, MA Institute of Technology, 1994, PHD, MA Institute of Technology"). Because the 2014 catalogue reports the year in which the undergraduate degree was obtained *before* the title of the degree (rather than *after*, as in the 2004 through 2013 Course Catalogs), different code is required to parse the 2014 catalog and create a vector filled with the ages of professors at Williams in 2014.
+From 2004 to 2013, Williams used the same format for posting information about its professors in the Course Catalog (i.e. "Daniel P. Aalberts Associate Professor of Physics B.S. (1989) M.I.T.; Ph.D. (1994) M.I.T."). Therefore, the same code effectively parses the 2004-2013 catalogs. For 2014, however, Williams changed the style of the facutly information section of the Course Catalog (to "Daniel P. Aalberts, Professor of Physics, 1989, BS, MA Institute of Technology, 1994, PHD, MA Institute of Technology"). Because the 2014 catalog reports the year in which the undergraduate degree was obtained *before* the title of the degree (rather than *after*, as in the 2004 through 2013 Course Catalogs), different code is required to parse the 2014 catalog.
 
-The ages_1 function scans the plain text file pertaining to a given year, identifies the positions of undergradduate degree titles, identifies the positions of years in which undergraduate degrees were obtained (based on the fact that in these Course Catalogs, the year a degree was obtained always appears one word after the degree title), extracts these years into a new vector, converts the years from strings to integers, and then creates a vector of ages (assuming that, on average, undergraduate degrees were obtained at age 22).
+The ages_1 function scans the plain text file pertaining to a given year from 2004 to 2013, identifies the positions of undergradduate degree titles by searching for phrases like "BA" and "BS," identifies the positions of years in which undergraduate degrees were obtained (based on the fact that in these Course Catalogs, the year a degree was obtained always appears one word after the degree title), extracts these years into a new vector, converts the years from strings to integers, and then creates a vector of ages (assuming that, on average, undergraduate degrees were obtained at age 22).
 
-The ages_2 function does basically the exact same thing. The differences are that it only scans the plain text file containing professor information for 2014 and that it finds the years undergraduate degrees were obtained based on the fact that in the 2014 Course Catalog, the year a degree was obtained always appears one word before the degree title.
+The ages_2 function does basically the exact same thing. The differences are that ages_2 only scans the plain text file containing professor information for 2014 and that it finds the years undergraduate degrees were obtained based on the fact that in the 2014 Course Catalog, the year a degree was obtained always appears one word *before* the degree title.
 
 ## Main Functions
 
@@ -95,7 +92,7 @@ If avg_age is called on an argument that is not an integer on [2004, 2014], avg_
 
 ### Oldest Professors
 
-The oldst function returns the name(s) and age of the oldest professor(s) in a given year. To determine the oldest professor employed at Williams in 2014, for example, call the oldst function on the integer 2014.
+The oldst function returns the name(s) and age of the oldest professor/lecturer(s) in a given year. To determine the oldest professor/lecturer employed at Williams in 2014, for example, call the oldst function on the integer 2014.
 
 > oldst(2014)
 ```{r, echo = FALSE}
@@ -173,7 +170,7 @@ If oldst is called on an argument that is not an integer on [2004, 2014], oldst 
 
 ### Youngest Professors
 
-The yngst function returns the name(s) and age of the youngest professor(s) in a given year. To determine the youngest professor employed at Williams in 2014, for example, call the yngst function on the integer 2014.
+The yngst function returns the name(s) and age of the youngest professor/lecturer(s) in a given year. To determine the youngest professor/lecturer employed at Williams in 2014, for example, call the yngst function on the integer 2014.
 
 > yngst(2014)
 ```{r, echo = FALSE}
@@ -351,7 +348,7 @@ The age_hist function relies on input from the subsidiary ages_1 and ages_2 func
 
 ### Change in Mean Age Over Time
 
-Avages' age_change function produces a plot which displays the change in mean age of professors at Williams College from 2004 to 2014. To generate this graph, call the age_change function with no argument.
+Avages' age_change function produces a plot, generated by ggplot2, which displays the change in mean age of professors/lecturers at Williams College from 2004 to 2014. To generate this graph, call the age_change function with no argument.
 
 > age_change()
 
