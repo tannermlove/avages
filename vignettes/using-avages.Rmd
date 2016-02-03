@@ -1,6 +1,6 @@
 ---
 title: "__Avages__"
-author: "Tanner Love"
+author: "Tanner Love '18"
 header-includes:
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
