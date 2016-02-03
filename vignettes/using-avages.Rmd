@@ -9,9 +9,7 @@ header-includes:
     - \chead{}
     - \rhead{AVAGES}
 ---
-```{r, echo = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
-```
+
 ## Introduction
 
 The __avages__ package includes functions which quickly offer information pertaining to the ages of the professors and lecturers at Williams College in Williamstown, MA in each year from 2004 to 2014. More specifically, avages gives, for each year, the average age of professors and lecturers, the name(s) and age(s) of the youngest and oldest professor(s) and lecturer(s), and a visual display of the distribution of ages. Additionally, avages gives a graphical representation of the change in mean ages from 2004 to 2014.
