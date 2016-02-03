@@ -1,15 +1,15 @@
 Package: avages
 Type: Package
-Title: Ages of Professors at Williams College
+Title: Ages of Faculty at Williams College
 Version: 0.1.0
 Authors@R: person("Tanner", "Love", email = "tml3@williams.edu",
      role = c("aut", "cre"))
 Maintainer: Who to complain to <tml3@williams.edu>
-Description: Ages of Professors at Williams College from 2004 to 2014. It
-    includes functions that return the average age of professors every year
+Description: Ages of Faculty at Williams College from 2004 to 2014. It
+    includes functions that return the average age of professors/lecturers every year
     from 2004 to 2014, functions that return histograms of ages each year, and
-    functions that return the name(s) and age(s) of the youngest and oldest
-    professor(s) each year.
+    functions that return the names and ages of the youngest and oldest
+    professors/lecturers each year.
 License: CC0
 LazyData: TRUE
 URL: http://github.com/tannermlove/avages
