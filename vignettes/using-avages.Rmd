@@ -8,8 +8,10 @@ header-includes:
 - \lhead{}
 - \chead{}
 - \rhead{AVAGES}
-vignette: |
-  %\VignetteIndexEntry{Using the avages package} %\VignetteEngine{knitr::rmarkdown} \usepackage[utf8]{inputenc}
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 ```{r, echo = FALSE}
       knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
