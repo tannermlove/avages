@@ -1,17 +1,15 @@
 ---
 title: "__Avages__"
 author: "Tanner Love"
+output: html_document
 header-includes:
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
 - \lhead{}
 - \chead{}
 - \rhead{AVAGES}
-output: pdf_document
-vignette: >
-  %\VignetteIndexEntry{Using the avages package}
-  %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+vignette: |
+  %\VignetteIndexEntry{Using the avages package} %\VignetteEngine{knitr::rmarkdown} \usepackage[utf8]{inputenc}
 ---
 ```{r, echo = FALSE}
       knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
